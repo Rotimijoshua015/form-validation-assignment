@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration and Login Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .form-container { margin-bottom: 40px; }
+        label { display: block; margin-top: 10px; }
+        input, select { width: 100%; padding: 8px; margin-top: 5px; }
+        .error { color: red; font-size: 0.9em; }
+        button { margin-top: 10px; padding: 10px 20px; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Registration Form</h2>
+        <form id="registrationForm">
+            <label>Name:<input type="text" id="name"></label>
+            <label>Email:<input type="email" id="email"></label>
+            <label>Password:<input type="password" id="password"></label>
+            <label>Confirm Password:<input type="password" id="confirmPassword"></label>
+            <label>Age:<input type="number" id="age"></label>
+            <label>Gender:</label>
+            <label><input type="radio" name="gender" value="Male"> Male</label>
+            <label><input type="radio" name="gender" value="Female"> Female</label>
+            <label>Country:
+                <select id="country">
+                    <option value="">Select Country</option>
+                    <option value="Nigeria">Nigeria</option>
+                    <option value="Ghana">Ghana</option>
+                    <option value="Kenya">Kenya</option>
+                </select>
+            </label>
+            <label><input type="checkbox" id="terms"> I agree to the Terms and Conditions</label>
+            <div id="regErrors" class="error"></div>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <div class="form-container">
+        <h2>Login Form</h2>
+        <form id="loginForm">
+            <label>Email:<input type="email" id="loginEmail"></label>
+            <label>Password:<input type="password" id="loginPassword"></label>
+            <div id="loginErrors" class="error"></div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("registrationForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const age = parseInt(document.getElementById("age").value);
+            const gender = document.querySelector("input[name='gender']:checked");
+            const country = document.getElementById("country").value;
+            const terms = document.getElementById("terms").checked;
+            const errors = [];
+
+            if (!name || !email || !password || !confirmPassword || isNaN(age) || !gender || !country || !terms) {
+                errors.push("All fields are required and terms must be accepted.");
+            }
+            if (!/^\S+@\S+\.\S+$/.test(email)) {
+                errors.push("Enter a valid email address.");
+            }
+            if (password.length < 8) {
+                errors.push("Password must be at least 8 characters long.");
+            }
+            if (password !== confirmPassword) {
+                errors.push("Passwords do not match.");
+            }
+            if (age < 18 || age > 100) {
+                errors.push("Age must be between 18 and 100.");
+            }
+
+            const errorDiv = document.getElementById("regErrors");
+            if (errors.length > 0) {
+                errorDiv.innerHTML = errors.join("<br>");
+            } else {
+                errorDiv.innerHTML = "Registration successful!";
+                // Form submission logic can go here
+            }
+        });
+
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const email = document.getElementById("loginEmail").value.trim();
+            const password = document.getElementById("loginPassword").value;
+            const errors = [];
+
+            if (!email || !password) {
+                errors.push("Both fields are required.");
+            }
+            if (!/^\S+@\S+\.\S+$/.test(email)) {
+                errors.push("Enter a valid email.");
+            }
+            if (password.length < 8) {
+                errors.push("Password must be at least 8 characters long.");
+            }
+
+            const errorDiv = document.getElementById("loginErrors");
+            if (errors.length > 0) {
+                errorDiv.innerHTML = errors.join("<br>");
+            } else {
+                errorDiv.innerHTML = "Login successful!";
+                // Login logic goes here
+            }
+        });
+    </script>
+</body>
+</html>
